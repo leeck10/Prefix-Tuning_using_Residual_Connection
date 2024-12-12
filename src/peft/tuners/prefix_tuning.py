@@ -95,6 +95,11 @@ class PrefixEncoder(torch.nn.Module):
         num_layers = config.num_layers
         encoder_hidden_size = config.encoder_hidden_size
         num_virtual_tokens = config.num_virtual_tokens
+
+        # modified
+        self.use_res_connect = config.use_residual_connect
+        self.use_res_block = config.use_residual_block
+        
         if self.prefix_projection and not config.inference_mode:
             # Use a two-layer MLP to encode the prefix
             self.embedding = torch.nn.Embedding(num_virtual_tokens, token_dim)
