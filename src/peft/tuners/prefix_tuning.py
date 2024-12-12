@@ -104,23 +104,23 @@ class PrefixEncoder(torch.nn.Module):
             # Use a two-layer MLP to encode the prefix
             self.embedding = torch.nn.Embedding(num_virtual_tokens, token_dim)
 
-            # residual connect
+            # modified
             if self.use_res_connect:
-                self.transform_1 = torch.nn.Linear(token_dim, encoder_hidden_size)
+                self.transform_1 = torch.nn.Linear(token_dim, token_dim)
                 self.transform_2 = torch.nn.Sequential(
                     torch.nn.Tanh(),
-                    torch.nn.Linear(encoder_hidden_size, num_layers * 2 * token_dim),
+                    torch.nn.Linear(token_dim, num_layers * 2 * token_dim),
                 )
             elif self.use_res_block:
                 self.transform_1 = torch.nn.Sequential(
-                    torch.nn.Linear(token_dim, encoder_hidden_size // 2),
+                    torch.nn.Linear(token_dim, encoder_hidden_size),
                     torch.nn.ReLU(),
-                    torch.nn.Linear(encoder_hidden_size // 2, encoder_hidden_size),
-                    torch.nn.LayerNorm(encoder_hidden_size)
+                    torch.nn.Linear(encoder_hidden_size, token_dim),
+                    torch.nn.LayerNorm(token_dim)
                 )
                 self.transform_2 = torch.nn.Sequential(
                     torch.nn.Tanh(),
-                    torch.nn.Linear(encoder_hidden_size, num_layers * 2 * token_dim),
+                    torch.nn.Linear(token_dim, num_layers * 2 * token_dim),
                 )
             else:
                 self.transform = torch.nn.Sequential(
@@ -128,6 +128,7 @@ class PrefixEncoder(torch.nn.Module):
                     torch.nn.Tanh(),
                     torch.nn.Linear(encoder_hidden_size, num_layers * 2 * token_dim),
                 )
+
         else:
             self.embedding = torch.nn.Embedding(num_virtual_tokens, num_layers * 2 * token_dim)
 
