@@ -43,6 +43,9 @@ class PrefixTuningConfig(PromptLearningConfig):
     use_residual_connect: bool = field(
         default=False,
     )
+    use_residual_block: bool = field(
+        default=False,
+    )
     def __post_init__(self):
         self.peft_type = PeftType.PREFIX_TUNING
 
