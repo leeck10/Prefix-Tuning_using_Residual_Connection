@@ -106,12 +106,7 @@ class PrefixEncoder(torch.nn.Module):
 
             # residual connect
             if self.use_res_connect:
-                self.transform_1 = torch.nn.Sequential(
-                    torch.nn.Linear(token_dim, encoder_hidden_size // 2),
-                    torch.nn.ReLU(),
-                    torch.nn.Linear(encoder_hidden_size // 2, encoder_hidden_size),
-                    torch.nn.LayerNorm(encoder_hidden_size)
-                )
+                self.transform_1 = torch.nn.Linear(token_dim, encoder_hidden_size)
                 self.transform_2 = torch.nn.Sequential(
                     torch.nn.Tanh(),
                     torch.nn.Linear(encoder_hidden_size, num_layers * 2 * token_dim),
