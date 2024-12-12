@@ -135,7 +135,15 @@ class PrefixEncoder(torch.nn.Module):
     def forward(self, prefix: torch.Tensor):
         if self.prefix_projection:
             prefix_tokens = self.embedding(prefix)
-            past_key_values = self.transform(prefix_tokens)
+
+            # modified
+            if self.use_res_connect or self.use_res_block:
+                x = self.transform_1(prefix_tokens)
+                x = (x + prefix_tokens)
+                past_key_values = self.transform_2(x)
+            else:
+                past_key_values = self.transform(prefix_tokens)
+
         else:
             past_key_values = self.embedding(prefix)
         return past_key_values
