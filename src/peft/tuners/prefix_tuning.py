@@ -40,7 +40,7 @@ class PrefixTuningConfig(PromptLearningConfig):
         default=False,
         metadata={"help": "Whether to project the prefix tokens"},
     )
-    use_res: bool = field(
+    use_residual_connect: bool = field(
         default=False,
     )
     def __post_init__(self):
