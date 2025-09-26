@@ -142,6 +142,7 @@ class PrefixEncoder(torch.nn.Module):
                     torch.nn.Tanh(),
                     torch.nn.Linear(encoder_hidden_size, num_layers * 2 * token_dim),
                 )
+
         else:
             self.embedding = torch.nn.Embedding(num_virtual_tokens, num_layers * 2 * token_dim)
 
@@ -150,6 +151,9 @@ class PrefixEncoder(torch.nn.Module):
             prefix_tokens = self.embedding(prefix)
 
             # modified
+            if self.use_gate:
+                gate = self.gate(prefix_tokens)
+                prefix_tokens = prefix_tokens * gate
             if self.use_res_connect or self.use_res_block:
                 x = self.transform_1(prefix_tokens)
                 x = (x + prefix_tokens)
