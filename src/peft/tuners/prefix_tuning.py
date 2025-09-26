@@ -105,6 +105,7 @@ class PrefixEncoder(torch.nn.Module):
         # modified
         self.use_res_connect = config.use_residual_connect
         self.use_res_block = config.use_residual_block
+        self.use_gate = config.use_gate
         
         if self.prefix_projection and not config.inference_mode:
             # Use a two-layer MLP to encode the prefix
