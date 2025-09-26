@@ -112,6 +112,13 @@ class PrefixEncoder(torch.nn.Module):
             self.embedding = torch.nn.Embedding(num_virtual_tokens, token_dim)
 
             # modified
+            if self.use_gate:
+                self.gate = torch.nn.Sequential(
+                    torch.nn.Linear(token_dim, encoder_hidden_size),
+                    torch.nn.ReLU(),
+                    troch.nn.Linear(encoder_hidden_size, 1),
+                    torch.nn.Sigmoid(),
+                )
             if self.use_res_connect:
                 self.transform_1 = torch.nn.Linear(token_dim, token_dim)
                 self.transform_2 = torch.nn.Sequential(
@@ -129,20 +136,12 @@ class PrefixEncoder(torch.nn.Module):
                     torch.nn.Tanh(),
                     torch.nn.Linear(token_dim, num_layers * 2 * token_dim),
                 )
-                if self.use_gate:
-                    self.gate = torch.nn.Sequential(
-                        torch.nn.Linear(token_dim, encoder_hidden_size),
-                        torch.nn.ReLU(),
-                        troch.nn.Linear(encoder_hidden_size, 1),
-                        torch.nn.Sigmoid(),
-                    )
             else:
                 self.transform = torch.nn.Sequential(
                     torch.nn.Linear(token_dim, encoder_hidden_size),
                     torch.nn.Tanh(),
                     torch.nn.Linear(encoder_hidden_size, num_layers * 2 * token_dim),
                 )
-
         else:
             self.embedding = torch.nn.Embedding(num_virtual_tokens, num_layers * 2 * token_dim)
 
