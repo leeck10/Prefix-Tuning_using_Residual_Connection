@@ -40,12 +40,18 @@ class PrefixTuningConfig(PromptLearningConfig):
         default=False,
         metadata={"help": "Whether to project the prefix tokens"},
     )
+
+    # modified
     use_residual_connect: bool = field(
         default=False,
     )
     use_residual_block: bool = field(
         default=False,
     )
+    use_gate: bool = field(
+        default=False,
+    )
+    
     def __post_init__(self):
         self.peft_type = PeftType.PREFIX_TUNING
 
