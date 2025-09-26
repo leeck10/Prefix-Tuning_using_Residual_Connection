@@ -129,6 +129,13 @@ class PrefixEncoder(torch.nn.Module):
                     torch.nn.Tanh(),
                     torch.nn.Linear(token_dim, num_layers * 2 * token_dim),
                 )
+                if self.use_gate:
+                    self.gate = torch.nn.Sequential(
+                        torch.nn.Linear(token_dim, encoder_hidden_size // 2),
+                        torch.nn.ReLU(),
+                        troch.nn.Linear(encoder_hidden_size // 2, 1),
+                        torch.nn.Sigmoid(),
+                    )
             else:
                 self.transform = torch.nn.Sequential(
                     torch.nn.Linear(token_dim, encoder_hidden_size),
